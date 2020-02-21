@@ -9,10 +9,10 @@ import java.util.concurrent.TimeUnit;
 public class Servos {
 
 
-    private Servo flip;             // Hub 3 Servo Slot 3 GAMER MOMENTS 2020
-    private Servo claw;             // Hub 3 Servo Slot 1 GAMER MOMENTS 2020
-    private CRServo horizontal;     // Hub 3 Servo Slot 2 GAMER MOMENTS 2020
-    private Servo cap;              // Hub 3 Servo Slot 4 GAMER MOMENTS 2020
+    private Servo flip;             // Hub 3 Servo Slot 3
+    private Servo claw;             // Hub 3 Servo Slot 1
+    private CRServo horizontal;     // Hub 3 Servo Slot 2
+    private Servo cap;              // Hub 3 Servo Slot 4
     private Servo kick;
 
     private final double CLAW_CLOSED = 0.2;
@@ -27,11 +27,11 @@ public class Servos {
     public Servos(Servo f, Servo cl, CRServo h, Servo ca, Servo k)
     {
         //servo hardware moments
-        claw.setDirection(Servo.Direction.FORWARD);
-        horizontal.setDirection(CRServo.Direction.FORWARD);
-        flip.setDirection(Servo.Direction.FORWARD);
-        kick.setDirection(Servo.Direction.FORWARD);
-        cap.setDirection(Servo.Direction.FORWARD);
+        cl.setDirection(Servo.Direction.FORWARD);
+        h.setDirection(CRServo.Direction.FORWARD);
+        f.setDirection(Servo.Direction.FORWARD);
+        k.setDirection(Servo.Direction.FORWARD);
+        ca.setDirection(Servo.Direction.FORWARD);
 
         flip = f;
         claw = cl;

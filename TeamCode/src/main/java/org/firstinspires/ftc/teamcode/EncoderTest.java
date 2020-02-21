@@ -4,10 +4,12 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
+import org.firstinspires.ftc.teamcode.Autonomous.DriveTrain;
 import org.firstinspires.ftc.teamcode.Hardware.FoundationArms;
 import android.media.MediaPlayer;
 import java.lang.Runnable;
@@ -18,23 +20,33 @@ import java.util.concurrent.TimeUnit;
 
 @Autonomous(name = "EncoderTest", group = "Autonomous")
 public class EncoderTest extends LinearOpMode {
-
-    private Robot robot = new Robot();
-
-//
-//    private final double fricRatio = 0.9;
+    private DriveTrain driveTrain;
 
     public void runOpMode() throws InterruptedException {
-        robot.init(hardwareMap);
+        DcMotor frontLeft = hardwareMap.dcMotor.get("frontLeft");
+        DcMotor backLeft = hardwareMap.dcMotor.get("backLeft");
+        DcMotor frontRight = hardwareMap.dcMotor.get("frontRight");
+        DcMotor backRight = hardwareMap.dcMotor.get("backRight");
 
-        robot.robotMotors.turnOnEncoders();
+        driveTrain = new DriveTrain(frontLeft, frontRight, backLeft, backRight);
 
         waitForStart();
 
+        ScheduledThreadPoolExecutor executor = new ScheduledThreadPoolExecutor(1);
+        executor.schedule(new Runnable() {
+            public void run() {
+                telemetry.addData("FL Velocity: ", driveTrain.getWheels().get(0).getVelocity());
+                telemetry.addData("FR Velocity: ", driveTrain.getWheels().get(1).getVelocity());
+                telemetry.addData("BL Velocity: ", driveTrain.getWheels().get(2).getVelocity());
+                telemetry.addData("BR Velocity: ", driveTrain.getWheels().get(3).getVelocity());
+                telemetry.update();
+            }
+        }, 100, TimeUnit.MILLISECONDS);
 
+        driveTrain.moveForward(96, 1);
 
-        robot.driveTrain.moveForward(24,.4);
-        robot.driveTrain.moveBackward(24,.4);
+        // robot.driveTrain.moveForward(24,.4);
+        // robot.driveTrain.moveBackward(24,.4);
 
 
 //

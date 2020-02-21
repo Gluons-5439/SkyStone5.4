@@ -23,6 +23,9 @@ public class GluonsTeleOp extends LinearOpMode {
        //boolean rakeIsLowered = false; GAMER MOMENTS 2020
         //int rakeButtonCD = 0; GAMER MOMENTS 2020
         //int lockButtonCD = 0; GAMER MOMENTS 2020
+        int liftHeight = 0;
+        final double STONE_INCHES = 5;
+        final double FOUNDATION_INCHES = 2.25;
         int slowModeButtonCD = 0;
         //boolean bArmIsClosed = false;
         boolean fArmIsDown = false;
@@ -43,27 +46,27 @@ public class GluonsTeleOp extends LinearOpMode {
         while (opModeIsActive()) {
 
 
-
+            robot.imu.loop();
 
             // DRIVE ====================================================                                                              Wheel vectors GAMER MOMENTS 2020
             //                                                                                                                      135 degrees  45 degrees GAMER MOMENTS 2020
-//            double maxPower = 1;
-//            double forward = Math.abs(gamepad1.left_stick_y) > 0.2 ? -gamepad1.left_stick_y : 0;
-//            double clockwise = Math.abs(gamepad1.right_stick_x) > 0.2 ? -gamepad1.right_stick_x : 0;                                  // 45 degrees   135 degrees GAMER MOMENTS 2020
-//            double right = Math.abs(gamepad1.left_stick_x) > 0.2 ? gamepad1.left_stick_x : 0;
-//            //Math for drive relative to theta
-//            clockwise *= -1;
-//
-//            double fr = forward - clockwise + right;  //+
-//            double br = forward - clockwise - right;  //-
-//            double fl = forward + clockwise - right;  //-
-//            double bl = forward + clockwise + right;  //+
-//
-//            fl = Range.scale(fl, -1, 1, -maxPower, maxPower);
-//            fr = Range.scale(fr, -1, 1, -maxPower, maxPower);
-//            bl = Range.scale(bl, -1, 1, -maxPower, maxPower);
-//            br = Range.scale(br, -1, 1, -maxPower, maxPower);
-//            robot.robotMotors.setMotorPower(fl, fr, bl, br);
+            double maxPower = 1;
+            double forward = Math.abs(gamepad1.left_stick_y) > 0.2 ? -gamepad1.left_stick_y : 0;
+            double clockwise = Math.abs(gamepad1.right_stick_x) > 0.2 ? -gamepad1.right_stick_x : 0;                                  // 45 degrees   135 degrees GAMER MOMENTS 2020
+            double right = Math.abs(gamepad1.left_stick_x) > 0.2 ? gamepad1.left_stick_x : 0;
+            //Math for drive relative to theta
+            clockwise *= -1;
+
+            double fr = forward - clockwise + right;  //+
+            double br = forward - clockwise - right;  //-
+            double fl = forward + clockwise - right;  //-
+            double bl = forward + clockwise + right;  //+
+
+            fl = Range.scale(fl, -1, 1, -maxPower, maxPower);
+            fr = Range.scale(fr, -1, 1, -maxPower, maxPower);
+            bl = Range.scale(bl, -1, 1, -maxPower, maxPower);
+            br = Range.scale(br, -1, 1, -maxPower, maxPower);
+            robot.robotMotors.setMotorPower(fl, fr, bl, br);
 //
 //
 //            // BUTTONS ================================================== GAMER MOMENTS 2020
@@ -78,19 +81,19 @@ public class GluonsTeleOp extends LinearOpMode {
 //                slowModeButtonCD = 12;
 //            }
 
-            double x = Math.pow(gamepad1.left_stick_x * -1, 3.0);
-            double y = Math.pow(gamepad1.left_stick_x * -1, 3.0);
-
-            final double rotation = Math.pow(gamepad1.right_stick_x*-1, 3.0)/1.5;
-            final double direction = Math.atan2(x, y) + robot.angles.firstAngle % (2.0 * Math.PI);
-            final double speed = Math.min(1.0, Math.sqrt(x * x + y * y));
-
-            final double lf = speed * Math.sin(direction + Math.PI / 4.0) + rotation;
-            final double rf = speed * Math.cos(direction + Math.PI / 4.0) - rotation;
-            final double lr = speed * Math.cos(direction + Math.PI / 4.0) + rotation;
-            final double rr = speed * Math.sin(direction + Math.PI / 4.0) - rotation;
-
-            robot.robotMotors.setMotorPower(lf, lr, rf, rr);
+//
+//            final double x = Math.pow(gamepad1.left_stick_x*-1, 3.0);
+//            final double y = Math.pow(gamepad1.left_stick_y *-1, 3.0);
+//            final double rotation = Math.pow(gamepad1.right_stick_x*1, 3.0)/1.5; //changed from negative to 1
+//            final double direction = Math.atan2(x, y) + robot.imu.getHeading();
+//            final double speed = Math.min(1.0, Math.sqrt(x * x + y * y));
+//
+//            final double frontLeft = 1 * speed * Math.sin(direction + Math.PI / 4.0) + rotation;
+//            final double frontRight = 1 * speed * Math.cos(direction + Math.PI / 4.0) - rotation;
+//            final double backLeft = 1 * speed * Math.cos(direction + Math.PI / 4.0) + rotation;
+//            final double backRight = 1 * speed * Math.sin(direction + Math.PI / 4.0) - rotation;
+//
+//            robot.robotMotors.setMotorPower(frontLeft, frontRight, backLeft, backRight);
 
             if (gamepad1.right_trigger > 0.2) {
                 robot.intake.endocytosis();
@@ -121,51 +124,46 @@ public class GluonsTeleOp extends LinearOpMode {
                 fArmButtonCD = 12;
             }
 
-//            if(kickButtonCD == 0 && gamepad2.x) {
-//                if (!kicked) {
-//                    robot.servoes.kick.setPosition(1);
-//                    kicked = true;
-//                } else {
-//                    h.kick.setPosition(0);
-//                    kicked = false;
-//                }
-//                kickButtonCD = 12;
-//            }
+            if(kickButtonCD == 0 && gamepad2.x) {
+                if (!kicked) {
+                    robot.s.kick();
+                    kicked = true;
+                } else {
+                    robot.s.unkick();
+                    kicked = false;
+                }
+                kickButtonCD = 12;
+            }
 
             //Lift
 
-            if(gamepad2.right_trigger > 0.2)
+            if(gamepad2.dpad_up)
             {
-                robot.lift.rise();
+                liftHeight+=STONE_INCHES;
+                robot.lift.runToPosition(liftHeight);
             }
-            else if(gamepad2.right_trigger < 0.2)
+            else if(gamepad2.dpad_down)
             {
-                robot.lift.stop();
+                liftHeight-=STONE_INCHES;
+                robot.lift.runToPosition(liftHeight);
             }
 
-            if(gamepad2.left_trigger > 0.2)
-            {
-                robot.lift.lower();
-            }
-            else if(gamepad2.left_trigger < 0.2)
-            {
-                robot.lift.stop();
-            }
+
 
 
 
 
             //Claw GAMER MOMENTS 2020
-//            if(cArmButtonCD == 0 && gamepad2.a) {
-//                if (!cArmIsClosed) {
-//                    h.claw.setPosition(0.2);
-//                    cArmIsClosed = true;
-//                } else {
-//                    h.claw.setPosition(0);
-//                    cArmIsClosed = false;
-//                }
-//                cArmButtonCD = 12;
-//            }
+            if(cArmButtonCD == 0 && gamepad2.a) {
+                if (!cArmIsClosed) {
+                    robot.s.closeClaw();
+                    cArmIsClosed = true;
+                } else {
+                    robot.s.openClaw();
+                    cArmIsClosed = false;
+                }
+                cArmButtonCD = 12;
+            }
 //            //Horizontal Linear Slide
 //            if(gamepad2.dpad_right)
 //            {
@@ -180,16 +178,10 @@ public class GluonsTeleOp extends LinearOpMode {
 //                h.horizontal.setPower(0);
 //            }
 //            //Capstone
-//            if(capCD == 0 && gamepad2.y) {
-//                if (!capIsDown) {
-//                    h.cap.setPosition(1);
-//                    capIsDown = true;
-//                } else {
-//                    h.cap.setPosition(0);
-//                    capIsDown = false;
-//                }
-//                capCD = 12;
-//            }
+            if(capCD == 0 && gamepad2.y) {
+                robot.s.placeCapstone();
+                capCD = 12;
+            }
 //            //Flip
 //            if(flipArmButtonCD == 0 && gamepad2.b) {
 //                if (!flipIsOut) {
@@ -284,7 +276,7 @@ public class GluonsTeleOp extends LinearOpMode {
 
             // TELEMETRY STATEMENTS
 
-
+            telemetry.addData("Gyro Heading", robot.imu.getHeadingDegrees());
 //            telemetry.addData("Position of Servo", h.foundationArmR.getPosition());
 //            telemetry.addData("Position of Servo", h.foundationArmL.getPosition());
 //            telemetry.addData("Alpha", h.color.alpha());

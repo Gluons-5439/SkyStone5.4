@@ -7,8 +7,11 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import java.util.ArrayList;
 
 public class Intake{
-    public DcMotor intakeWheelL;   // Hub 2 Slot 3 GAMER MOMENTS 2020
-    public DcMotor intakeWheelR;   // Hub 3 Slot 3 GAMER MOMENTS 2020
+
+
+
+    public DcMotor intakeWheelL;   // Hub 2 Slot 3
+    public DcMotor intakeWheelR;   // Hub 3 Slot 3
     /**
      * Intake Class
      */
@@ -44,7 +47,8 @@ public class Intake{
 
     public void stop()
     {
-
+        intakeWheelR.setPower(0);
+        intakeWheelL.setPower(0);
     }
 
 

@@ -9,11 +9,13 @@ public class FoundationArms {
 
     public FoundationArms(Servo left, Servo right)
     {
-        left.setPosition(0);
-        right.setPosition(0);
+
 
         left.setDirection(Servo.Direction.REVERSE);
         right.setDirection(Servo.Direction.FORWARD);
+
+        left.setPosition(0);
+        right.setPosition(0);
 
         foundationArmL = left;
         foundationArmR = right;

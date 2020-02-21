@@ -19,10 +19,10 @@ public class DriveTrainVel extends RobotMotorsAuto {
         final double PIDF_P = 0.1 * PIDF_F;
         final double PIDF_I = 0.1 * PIDF_P;
         final double PIDF_D = 0;
-        PIDFCoefficients pidfCoefficients = new PIDFCoefficients(PIDF_P,PIDF_I,PIDF_D,PIDF_F);
-        for (int i = 0; i < wheels.size(); i++) {
-            wheels.get(i).setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, pidfCoefficients);
-        }
+//        PIDFCoefficients pidfCoefficients = new PIDFCoefficients(PIDF_P,PIDF_I,PIDF_D,PIDF_F);
+//        for (int i = 0; i < wheels.size(); i++) {
+//            wheels.get(i).setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, pidfCoefficients);
+//        }
     }
 
     @Override

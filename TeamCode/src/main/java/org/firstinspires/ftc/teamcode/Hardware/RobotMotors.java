@@ -10,10 +10,10 @@ import java.util.ArrayList;
  */
 
 public class RobotMotors {
-    private DcMotorEx frontRight;    // Hub 3 Slot 0
-    private DcMotorEx frontLeft;     // Hub 2 Slot 0
-    private DcMotorEx backRight;     // Hub 3 Slot 1
-    private DcMotorEx backLeft;      // Hub 2 Slot 1
+    private DcMotorEx frontRight;    // Hub 3 Slot 0    GAMER MOMENTS 2020
+    private DcMotorEx frontLeft;     // Hub 2 Slot 0     GAMER MOMENTS 2020
+    private DcMotorEx backRight;     // Hub 3 Slot 1    GAMER MOMENTS 2020
+    private DcMotorEx backLeft;      // Hub 2 Slot 1    GAMER MOMENTS 2020
     protected ArrayList<DcMotorEx> wheels = new ArrayList<>();
 
     protected MoveStyle direction;
@@ -28,8 +28,8 @@ public class RobotMotors {
         backLeft = (DcMotorEx) bl;
         backRight = (DcMotorEx) br;
         
-        frontRight.setDirection(DcMotor.Direction.REVERSE);
         backRight.setDirection(DcMotor.Direction.REVERSE);
+        frontRight.setDirection(DcMotor.Direction.REVERSE);
 
         frontLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         frontRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -60,10 +60,16 @@ public class RobotMotors {
         backRight.setPower(brpower);
     }
     
-    protected void setMotorPower() {
+    public void setMotorPower() {
         for (int i = 0; i < wheels.size(); i++) {
             wheels.get(i).setPower(0);
             wheels.get(i).setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        }
+    }
+
+    public void setMotorPower(double power) {
+        for (int i = 0; i < wheels.size(); i++) {
+            wheels.get(i).setPower(power);
         }
     }
 

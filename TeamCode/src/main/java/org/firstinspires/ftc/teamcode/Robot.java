@@ -133,6 +133,7 @@ public class Robot {
 
 
 
+        s = new Servos(flip,claw,horizontal,cap,kick);
         driveTrain = new DriveTrainVel(frontLeft, frontRight, backLeft, backRight);
         intake = new Intake(intakeWheelL, intakeWheelR);
         foundationArms = new FoundationArms(foundationArmL, foundationArmR);

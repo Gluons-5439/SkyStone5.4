@@ -1,4 +1,5 @@
 package org.firstinspires.ftc.teamcode.Hardware;
+import org.firstinspires.ftc.robotcore.external.navigation.Acceleration;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
@@ -9,6 +10,7 @@ public class IMU {
 
     public BNO055IMU gyro;
     Orientation angles;
+    Acceleration gravity;
 
     /**
      * IMU Class
@@ -25,6 +27,11 @@ public class IMU {
         gyro = imu;
     }
 
+    public void loop() {
+        angles = gyro.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.RADIANS);
+        gravity = gyro.getGravity();
+    }
+
     public void initialize()
     {
         BNO055IMU.Parameters IMUParameters = new BNO055IMU.Parameters();
@@ -33,6 +40,21 @@ public class IMU {
         IMUParameters.calibrationDataFile = "AdafruitIMUCalibration.json";
         IMUParameters.calibrationDataFile = "IMUCalibration.json";
         gyro.initialize(IMUParameters);
+    }
+
+    private double getRawHeading() {
+        return angles.firstAngle;
+    }
+
+    /**
+     * @return the robot's current heading in radians
+     */
+    public double getHeading() {
+        return (getRawHeading()) % (2.0 * Math.PI);
+    }
+
+    public double getHeadingDegrees() {
+        return Math.toDegrees(getHeading());
     }
 
 }
